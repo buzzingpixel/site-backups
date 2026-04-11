@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset>
+    <file>config</file>
+    <file>src</file>
+    <file>cli</file>
+
+    <!-- Include the RxAnte ruleset -->
+    <rule ref="RxAnteCodingStandards" />
+</ruleset>

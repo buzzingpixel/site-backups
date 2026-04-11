@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+if [ -z "${1:-}" ]; then
+    echo "Usage:"
+    echo "  ./dev docker build (builds docker images)";
+    echo "  ./dev docker up (builds docker images)";
+    echo "  ./dev docker down (builds docker images)";
+
+    exit 0;
+fi
+
+if [ "$1" = "docker" ] && [ "$2" = "build" ]; then
+    chmod +x ./devCli/build.sh;
+    ./devCli/build.sh;
+
+    exit 0;
+fi
+
+if [ "$1" = "docker" ] && [ "$2" = "up" ]; then
+    chmod +x ./devCli/up.sh;
+    ./devCli/up.sh;
+
+    exit 0;
+fi
+
+if [ "$1" = "docker" ] && [ "$2" = "down" ]; then
+    chmod +x ./devCli/down.sh;
+    ./devCli/down.sh;
+
+    exit 0;
+fi
+
+printf '\033[31mUnknown command\033[0m\n'
+exit 1

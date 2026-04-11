@@ -1,0 +1,9 @@
+parameters:
+    paths:
+        - config
+        - src
+        - cli
+    excludePaths:
+
+includes:
+    - vendor/rxante/coding-standards/phpstan.neon

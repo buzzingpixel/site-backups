@@ -1,0 +1,33 @@
+{
+    "name": "buzzingpixel/site-backups",
+    "version": "dev-site-backups",
+    "description": "Backs up configured sites",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.4",
+        "buzzingpixel/php-queue": "^2.0",
+        "buzzingpixel/php-scheduler": "^1.1",
+        "rxante/php-app-bootstrap": "^1.2"
+    },
+    "require-dev": {
+        "buzzingpixel/symfony-var-dumper-decorator": "^1.0",
+        "filp/whoops": "^2.18",
+        "rxante/coding-standards": "^3.0",
+        "symfony/var-dumper": "^6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Config\\": "config",
+            "App\\": "src",
+            "Storage\\": "storage"
+        }
+    },
+    "config": {
+        "bin-compat": "full",
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

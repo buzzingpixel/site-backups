@@ -1,0 +1,27 @@
+/vendor
+
+# Tooling
+.php_cs.cache
+.phpunit.cache
+.phpunit.result.cache
+/*-workspace
+/*.sublime-*
+
+# System
+.cache
+.DS_Store
+.tmp
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+error_log
+Thumbs.db
+Homestead.yaml
+*.vagrant
+
+!.gitkeep

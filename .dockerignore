@@ -1,0 +1,6 @@
+.git
+.DS_Store
+
+/vendor
+/storage/*
+!/storage/.gitignore
