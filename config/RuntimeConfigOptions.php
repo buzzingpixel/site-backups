@@ -7,4 +7,7 @@ namespace Config;
 enum RuntimeConfigOptions
 {
     case USE_WHOOPS_ERROR_HANDLING;
+
+    // SMRC
+    case SMRC_DB_PASSWORD;
 }

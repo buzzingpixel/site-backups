@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+$dbContainerName ??= '';
+assert(is_string($dbContainerName));
+
+$remoteSqlPath ??= '';
+assert(is_string($remoteSqlPath));
+
+$sqlFileName ??= '';
+assert(is_string($sqlFileName));
+
+$dbUser ??= '';
+assert(is_string($dbUser));
+
+$dbPassword ??= '';
+assert(is_string($dbPassword));
+
+$dbName ??= '';
+assert(is_string($dbName));
+?>
+
+DB_CONTAINER_ID=$(docker ps -f name=<?=$dbContainerName?> --quiet);
+
+# Make sure the dump file does not exist on host
+[ -e <?=$remoteSqlPath?> ] && rm <?=$remoteSqlPath?>;
+
+# Make sure the dump file does not exist in the Docker container
+docker exec --user root --workdir /tmp ${DB_CONTAINER_ID} bash -c '[ -e <?=$sqlFileName?> ] && rm <?=$sqlFileName?>';
+
+# Dump the database in the Docker container
+docker exec --user root --workdir /tmp ${DB_CONTAINER_ID} bash -c 'mysqldump -u<?=$dbUser?> -p<?=$dbPassword?> <?=$dbName?> > <?=$sqlFileName?>';
+
+# Copy dump out of container
+docker cp ${DB_CONTAINER_ID}:/tmp/<?=$sqlFileName?> <?=$remoteSqlPath?>;
+
+# Delete the dump from the container
+docker exec --user root --workdir /tmp ${DB_CONTAINER_ID} bash -c '[ -e <?=$sqlFileName?> ] && rm <?=$sqlFileName?>';

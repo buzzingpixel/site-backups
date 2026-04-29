@@ -24,6 +24,8 @@ RUN docker-php-ext-install mbstring \
     && docker-php-ext-install pcntl \
     && docker-php-ext-install bcmath
 
+RUN pecl install ssh2 && docker-php-ext-enable ssh2
+
 COPY --from=composer:2.9.5 /usr/bin/composer /usr/bin/composer
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"

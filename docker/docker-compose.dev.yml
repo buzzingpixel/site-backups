@@ -8,9 +8,10 @@ services:
     container_name: buzzingpixel-site-backups-queue-consumer
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
-#    volumes:
-#      - ./app/.bash_history:/root/.bash_history:delegated
-#      - ../:/var/www:delegated
+    volumes:
+      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
+      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - /Volumes/Promenade/git/site-backups/storage:/storage
 
   app-schedule-runner:
     restart: always
@@ -21,6 +22,7 @@ services:
     container_name: buzzingpixel-site-backups-schedule-runner
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
-#    volumes:
-#      - ./app/.bash_history:/root/.bash_history:delegated
-#      - ../:/var/www:delegated
+    volumes:
+      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
+      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - /Volumes/Promenade/git/site-backups/storage:/storage

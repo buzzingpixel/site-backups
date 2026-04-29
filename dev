@@ -2,9 +2,10 @@
 
 if [ -z "${1:-}" ]; then
     echo "Usage:"
-    echo "  ./dev docker build (builds docker images)";
-    echo "  ./dev docker up (builds docker images)";
-    echo "  ./dev docker down (builds docker images)";
+    echo "  ./dev docker build";
+    echo "  ./dev docker up";
+    echo "  ./dev docker down";
+    echo "  ./dev docker container";
 
     exit 0;
 fi
@@ -26,6 +27,13 @@ fi
 if [ "$1" = "docker" ] && [ "$2" = "down" ]; then
     chmod +x ./devCli/down.sh;
     ./devCli/down.sh;
+
+    exit 0;
+fi
+
+if [ "$1" = "docker" ] && [ "$2" = "container" ]; then
+    chmod +x ./devCli/container-app.sh;
+    ./devCli/container-app.sh;
 
     exit 0;
 fi

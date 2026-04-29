@@ -11,7 +11,10 @@ services:
     image: buzzingpixel-site-backups-queue-consumer
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
-#    volumes:
+    volumes:
+      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
+      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - /Volumes/ivy-ext-01/site-backups:/storage
 
   app-schedule-runner:
     deploy:
@@ -25,4 +28,7 @@ services:
     image: buzzingpixel-site-backups-schedule-runner
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
-#    volumes:
+    volumes:
+      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
+      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - /Volumes/ivy-ext-01/site-backups:/storage
