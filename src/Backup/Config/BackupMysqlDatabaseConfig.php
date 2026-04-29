@@ -13,7 +13,6 @@ readonly class BackupMysqlDatabaseConfig
         public string $dbContainerName,
         public string $remoteSqlPath,
         public string $sqlFileName,
-        public string $localBackupFolderName,
     ) {
     }
 

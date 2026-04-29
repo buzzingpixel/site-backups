@@ -7,6 +7,7 @@ namespace Config\Dependencies;
 use App\Backup\Config\BackupConfig;
 use App\Backup\Config\BackupConfigCollection;
 use App\Backup\Config\BackupMysqlDatabaseConfig;
+use App\Backup\Config\BackupRsyncConfig;
 use Config\RuntimeConfigOptions;
 use RxAnte\AppBootstrap\Dependencies\Bindings;
 use RxAnte\AppBootstrap\RuntimeConfig;
@@ -24,6 +25,7 @@ readonly class BackupConfigBindings
                     name: 'smrc',
                     sshHost: '5.161.111.41',
                     sshUsername: 'root',
+                    localBackupFolderName: 'stmarkreformed.com',
                     mysqlDatabaseConfigs: [
                         new BackupMysqlDatabaseConfig(
                             dbUser: 'site',
@@ -34,7 +36,24 @@ readonly class BackupConfigBindings
                             dbContainerName: 'smrc_db',
                             remoteSqlPath: '/root/stmarkreformed.com/stmarkreformed.sql',
                             sqlFileName: 'stmarkreformed.sql',
-                            localBackupFolderName: 'stmarkreformed.com',
+                        ),
+                    ],
+                    rsyncConfigs: [
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_files-above-webroot-volume/_data/',
+                            destinationDirectoryName: 'filesAboveWebroot',
+                        ),
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_files-volume/_data/',
+                            destinationDirectoryName: 'files',
+                        ),
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_uploads-volume/_data/',
+                            destinationDirectoryName: 'uploads',
+                        ),
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_web-public-images-galleries-volume/_data/',
+                            destinationDirectoryName: 'images/galleries',
                         ),
                     ],
                 ),

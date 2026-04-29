@@ -20,11 +20,8 @@ readonly class BackupMySqlDatabase
         string $sshHost,
         string $sshUsername,
         BackupMysqlDatabaseConfig $config,
+        BackupDirHandler $backupDir,
     ): void {
-        $backupDir = new BackupDirHandler(
-            projectDir: $config->localBackupFolderName,
-        );
-
         $sshConnection = new SshConnection(
             host: $sshHost,
             userName: $sshUsername,

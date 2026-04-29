@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49f8a79a5165ac69ba9703b691219f13",
+    "content-hash": "582a61e55a06ab28847a1cdb896dc0a7",
     "packages": [
         {
             "name": "brick/math",
@@ -753,6 +753,48 @@
                 "source": "https://github.com/php-fig/http-message-util/tree/1.1.5"
             },
             "time": "2020-11-24T22:02:12+00:00"
+        },
+        {
+            "name": "jenwachter/php-rsync",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jenwachter/php-rsync.git",
+                "reference": "078c74f6d1e7c7dd5d802079b07b3104ea2e004b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jenwachter/php-rsync/zipball/078c74f6d1e7c7dd5d802079b07b3104ea2e004b",
+                "reference": "078c74f6d1e7c7dd5d802079b07b3104ea2e004b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/log": "^1|^2|^3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpRsync\\": [
+                        "src/",
+                        "tests/src/",
+                        "tests/mocks/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "homepage": "http://github.com/jenwachter/php-rsync",
+            "support": {
+                "issues": "https://github.com/jenwachter/php-rsync/issues",
+                "source": "https://github.com/jenwachter/php-rsync/tree/v2.0.1"
+            },
+            "time": "2024-12-05T13:51:39+00:00"
         },
         {
             "name": "laminas/laminas-escaper",

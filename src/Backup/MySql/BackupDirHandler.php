@@ -7,6 +7,7 @@ namespace App\Backup\MySql;
 use DateTimeImmutable;
 
 use function implode;
+use function ltrim;
 use function mkdir;
 
 readonly class BackupDirHandler
@@ -28,11 +29,28 @@ readonly class BackupDirHandler
         mkdir($this->backupDir, recursive: true);
     }
 
-    public function createFilePath(string $fileName): string
-    {
-        return implode('/', [
+    public function createFilePath(
+        string $fileName,
+        bool $trimLeadingSlash = false,
+    ): string {
+        $dir = implode('/', [
             $this->backupDir,
             $fileName,
         ]);
+
+        if ($trimLeadingSlash) {
+            $dir = ltrim($dir, '/');
+        }
+
+        return $dir;
+    }
+
+    public function mkDirInBackupDir(string $dirName): bool
+    {
+        return mkdir(
+            $this->createFilePath($dirName),
+            0777,
+            true,
+        );
     }
 }
