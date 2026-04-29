@@ -10,4 +10,7 @@ enum RuntimeConfigOptions
 
     // SMRC
     case SMRC_DB_PASSWORD;
+
+    // BuzzingPixel
+    case BUZZINGPIXEL_DB_PASSWORD;
 }

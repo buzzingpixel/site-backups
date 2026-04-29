@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backup\MySql;
+namespace App\Backup;
 
 use DateTimeImmutable;
 

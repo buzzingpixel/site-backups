@@ -9,15 +9,15 @@ use function array_values;
 
 readonly class BackupConfig
 {
-    /** @var BackupMysqlDatabaseConfig[] */
-    public array $mysqlDatabaseConfigs;
+    /** @var BackupDatabaseConfig[] */
+    public array $databaseConfigs;
 
     /** @var BackupRsyncConfig[] */
     public array $rsyncConfigs;
 
     /**
-     * @param BackupMysqlDatabaseConfig[] $mysqlDatabaseConfigs
-     * @param BackupRsyncConfig[]         $rsyncConfigs
+     * @param BackupDatabaseConfig[] $mysqlDatabaseConfigs
+     * @param BackupRsyncConfig[]    $rsyncConfigs
      */
     public function __construct(
         public string $name,
@@ -27,8 +27,8 @@ readonly class BackupConfig
         array $mysqlDatabaseConfigs = [],
         array $rsyncConfigs = [],
     ) {
-        $this->mysqlDatabaseConfigs = array_values(array_map(
-            static fn (BackupMysqlDatabaseConfig $c) => $c,
+        $this->databaseConfigs = array_values(array_map(
+            static fn (BackupDatabaseConfig $c) => $c,
             $mysqlDatabaseConfigs,
         ));
 
@@ -40,7 +40,7 @@ readonly class BackupConfig
 
     public function walkMySqlDatabaseConfigs(callable $callback): void
     {
-        array_map($callback, $this->mysqlDatabaseConfigs);
+        array_map($callback, $this->databaseConfigs);
     }
 
     public function walkRsyncConfigs(callable $callback): void

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Config\Events;
 
-use App\Backup\Backup;
+use App\Backup\BackupCommand;
 use RxAnte\AppBootstrap\Cli\ApplyCliCommandsEvent;
 
 readonly class ApplyCommands
 {
     public function onDispatch(ApplyCliCommandsEvent $commands): void
     {
-        Backup::registerCommand(commands: $commands);
+        BackupCommand::registerCommand(commands: $commands);
     }
 }

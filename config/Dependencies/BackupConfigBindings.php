@@ -7,6 +7,7 @@ namespace Config\Dependencies;
 use App\Backup\Config\BackupConfig;
 use App\Backup\Config\BackupConfigCollection;
 use App\Backup\Config\BackupMysqlDatabaseConfig;
+use App\Backup\Config\BackupPostgresDatabaseConfig;
 use App\Backup\Config\BackupRsyncConfig;
 use Config\RuntimeConfigOptions;
 use RxAnte\AppBootstrap\Dependencies\Bindings;
@@ -54,6 +55,34 @@ readonly class BackupConfigBindings
                         new BackupRsyncConfig(
                             rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_web-public-images-galleries-volume/_data/',
                             destinationDirectoryName: 'images/galleries',
+                        ),
+                    ],
+                ),
+                new BackupConfig(
+                    name: 'buzzingpixel',
+                    sshHost: '5.161.94.209',
+                    sshUsername: 'root',
+                    localBackupFolderName: 'buzzingpixel.com',
+                    mysqlDatabaseConfigs: [
+                        new BackupPostgresDatabaseConfig(
+                            dbUser: 'buzzingpixel',
+                            dbPassword: $runtimeConfig->getString(
+                                from: RuntimeConfigOptions::BUZZINGPIXEL_DB_PASSWORD,
+                            ),
+                            dbName: 'buzzingpixel',
+                            dbContainerName: 'buzzingpixel_db.1',
+                            remoteSqlPath: '/root/buzzingpixel.com/buzzingpixel.psql',
+                            sqlFileName: 'buzzingpixel.psql',
+                        ),
+                    ],
+                    rsyncConfigs: [
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/buzzingpixel_files-volume/_data/',
+                            destinationDirectoryName: 'files',
+                        ),
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/buzzingpixel_storage-volume/_data/',
+                            destinationDirectoryName: 'storage-volume',
                         ),
                     ],
                 ),

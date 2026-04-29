@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Backup\MySql;
+namespace App\Backup\Sql;
 
-use App\Backup\Config\BackupMysqlDatabaseConfig;
+use App\Backup\BackupDirHandler;
+use App\Backup\Config\BackupDatabaseConfig;
 use App\Ssh\SshConnection;
 
 use function implode;
 
-readonly class BackupMySqlDatabase
+readonly class BackupDatabase
 {
     public function __construct(
         private DumpRemoteDbScriptFactory $dumpRemoteDbScriptFactory,
@@ -19,7 +20,7 @@ readonly class BackupMySqlDatabase
     public function run(
         string $sshHost,
         string $sshUsername,
-        BackupMysqlDatabaseConfig $config,
+        BackupDatabaseConfig $config,
         BackupDirHandler $backupDir,
     ): void {
         $sshConnection = new SshConnection(
@@ -32,15 +33,15 @@ readonly class BackupMySqlDatabase
         );
 
         $sshConnection->scpPull(
-            source: $config->remoteSqlPath,
+            source: $config->remoteSqlPath(),
             destination: $backupDir->createFilePath(
-                fileName: $config->sqlFileName,
+                fileName: $config->sqlFileName(),
             ),
         );
 
         $sshConnection->runCommand(implode(' ', [
             'rm',
-            $config->remoteSqlPath,
+            $config->remoteSqlPath(),
         ]));
 
         $sshConnection->close();

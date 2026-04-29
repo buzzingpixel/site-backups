@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Backup;
 
 use App\Backup\Config\BackupRsyncConfig;
-use App\Backup\MySql\BackupDirHandler;
 use PhpRsync\Connection;
 
 readonly class BackupRsyncDirectory

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Backup\Config;
 
-readonly class BackupMysqlDatabaseConfig implements BackupDatabaseConfig
+readonly class BackupPostgresDatabaseConfig implements BackupDatabaseConfig
 {
     use BackupDatabaseConfigConstructor;
 }

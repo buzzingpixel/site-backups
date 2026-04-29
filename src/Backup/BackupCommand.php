@@ -6,13 +6,12 @@ namespace App\Backup;
 
 use App\Backup\Config\BackupConfig;
 use App\Backup\Config\BackupConfigCollection;
-use App\Backup\Config\BackupMysqlDatabaseConfig;
+use App\Backup\Config\BackupDatabaseConfig;
 use App\Backup\Config\BackupRsyncConfig;
-use App\Backup\MySql\BackupDirHandler;
-use App\Backup\MySql\BackupMySqlDatabase;
+use App\Backup\Sql\BackupDatabase;
 use RxAnte\AppBootstrap\Cli\ApplyCliCommandsEvent;
 
-readonly class Backup
+readonly class BackupCommand
 {
     public static function registerCommand(ApplyCliCommandsEvent $commands): void
     {
@@ -21,7 +20,7 @@ readonly class Backup
 
     public function __construct(
         private BackupConfigCollection $config,
-        private BackupMySqlDatabase $backupMysqlDatabase,
+        private BackupDatabase $backupMysqlDatabase,
         private BackupRsyncDirectory $backupRsyncDirectory,
     ) {
     }
@@ -43,7 +42,7 @@ readonly class Backup
         );
 
         $config->walkMySqlDatabaseConfigs(
-            callback: function (BackupMysqlDatabaseConfig $mySqlConfig) use (
+            callback: function (BackupDatabaseConfig $mySqlConfig) use (
                 $config,
                 $backupDir,
             ): void {
