@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Config\Events;
 
+use App\Backup\ApplyMonthlyBackupCommand;
 use App\Backup\ApplyRetentionCommand;
 use App\Backup\BackupCommand;
 use App\Backup\EnqueueRunBackupsByNameCommand;
@@ -15,6 +16,7 @@ readonly class ApplyCommands
 {
     public function onDispatch(ApplyCliCommandsEvent $commands): void
     {
+        ApplyMonthlyBackupCommand::registerCommand(commands: $commands);
         ApplyRetentionCommand::registerCommand(commands: $commands);
         BackupCommand::registerCommand(commands: $commands);
         EnqueueRunBackupsByNameCommand::registerCommand(commands: $commands);
