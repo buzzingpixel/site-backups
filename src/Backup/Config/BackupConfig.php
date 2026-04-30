@@ -16,7 +16,7 @@ readonly class BackupConfig
     public array $rsyncConfigs;
 
     /**
-     * @param BackupDatabaseConfig[] $mysqlDatabaseConfigs
+     * @param BackupDatabaseConfig[] $databaseConfigs
      * @param BackupRsyncConfig[]    $rsyncConfigs
      */
     public function __construct(
@@ -24,12 +24,12 @@ readonly class BackupConfig
         public string $sshHost,
         public string $sshUsername,
         public string $localBackupFolderName,
-        array $mysqlDatabaseConfigs = [],
+        array $databaseConfigs = [],
         array $rsyncConfigs = [],
     ) {
         $this->databaseConfigs = array_values(array_map(
             static fn (BackupDatabaseConfig $c) => $c,
-            $mysqlDatabaseConfigs,
+            $databaseConfigs,
         ));
 
         $this->rsyncConfigs = array_values(array_map(

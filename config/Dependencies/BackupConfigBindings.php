@@ -27,7 +27,7 @@ readonly class BackupConfigBindings
                     sshHost: '5.161.111.41',
                     sshUsername: 'root',
                     localBackupFolderName: 'stmarkreformed.com',
-                    mysqlDatabaseConfigs: [
+                    databaseConfigs: [
                         new BackupMysqlDatabaseConfig(
                             dbUser: 'site',
                             dbPassword: $runtimeConfig->getString(
@@ -63,7 +63,7 @@ readonly class BackupConfigBindings
                     sshHost: '5.161.94.209',
                     sshUsername: 'root',
                     localBackupFolderName: 'buzzingpixel.com',
-                    mysqlDatabaseConfigs: [
+                    databaseConfigs: [
                         new BackupPostgresDatabaseConfig(
                             dbUser: 'buzzingpixel',
                             dbPassword: $runtimeConfig->getString(
@@ -83,6 +83,58 @@ readonly class BackupConfigBindings
                         new BackupRsyncConfig(
                             rootRelativeServerSrcDir: 'var/lib/docker/volumes/buzzingpixel_storage-volume/_data/',
                             destinationDirectoryName: 'storage-volume',
+                        ),
+                    ],
+                ),
+                new BackupConfig(
+                    name: 'moviebyte',
+                    sshHost: '5.161.94.209',
+                    sshUsername: 'root',
+                    localBackupFolderName: 'moviebyte.com',
+                    databaseConfigs: [
+                        new BackupMysqlDatabaseConfig(
+                            dbUser: 'site',
+                            dbPassword: $runtimeConfig->getString(
+                                from: RuntimeConfigOptions::MOVIE_BYTE_DB_PASSWORD,
+                            ),
+                            dbName: 'site',
+                            dbContainerName: 'moviebyte_db',
+                            remoteSqlPath: '/root/moviebyte.com/moviebyte.sql',
+                            sqlFileName: 'moviebyte.sql',
+                        ),
+                    ],
+                    rsyncConfigs: [
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/moviebyte_uploads-volume/_data/',
+                            destinationDirectoryName: 'uploads',
+                        ),
+                    ],
+                ),
+                new BackupConfig(
+                    name: 'nightowl',
+                    sshHost: '5.161.94.209',
+                    sshUsername: 'root',
+                    localBackupFolderName: 'nightowl.fm',
+                    databaseConfigs: [
+                        new BackupPostgresDatabaseConfig(
+                            dbUser: 'nightowl',
+                            dbPassword: $runtimeConfig->getString(
+                                from: RuntimeConfigOptions::NIGHT_OWL_DB_PASSWORD,
+                            ),
+                            dbName: 'nightowl',
+                            dbContainerName: 'nightowl_db',
+                            remoteSqlPath: '/root/nightowl.fm/nightowl.psql',
+                            sqlFileName: 'nightowl.psql',
+                        ),
+                    ],
+                    rsyncConfigs: [
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/nightowl_files-volume/_data/',
+                            destinationDirectoryName: 'public/files',
+                        ),
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: 'var/lib/docker/volumes/nightowl_episodes-volume/_data/',
+                            destinationDirectoryName: 'episodes',
                         ),
                     ],
                 ),

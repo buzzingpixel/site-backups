@@ -8,9 +8,8 @@ enum RuntimeConfigOptions
 {
     case USE_WHOOPS_ERROR_HANDLING;
 
-    // SMRC
     case SMRC_DB_PASSWORD;
-
-    // BuzzingPixel
     case BUZZINGPIXEL_DB_PASSWORD;
+    case MOVIE_BYTE_DB_PASSWORD;
+    case NIGHT_OWL_DB_PASSWORD;
 }
