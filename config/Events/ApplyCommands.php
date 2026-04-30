@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Config\Events;
 
+use App\Backup\ApplyRetentionCommand;
 use App\Backup\BackupCommand;
 use App\Backup\EnqueueRunBackupsByNameCommand;
 use BuzzingPixel\Queue\Framework\QueueConsumeNextSymfonyCommand;
@@ -14,6 +15,7 @@ readonly class ApplyCommands
 {
     public function onDispatch(ApplyCliCommandsEvent $commands): void
     {
+        ApplyRetentionCommand::registerCommand(commands: $commands);
         BackupCommand::registerCommand(commands: $commands);
         EnqueueRunBackupsByNameCommand::registerCommand(commands: $commands);
 

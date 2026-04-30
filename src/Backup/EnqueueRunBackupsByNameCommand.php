@@ -43,5 +43,12 @@ readonly class EnqueueRunBackupsByNameCommand
             class: RunBackupByName::class,
             context: ['name' => $config->name],
         );
+
+        $this->queueHandler->enqueueJob(
+            handle: ApplyRetentionByName::JOB_HANDLE,
+            name: ApplyRetentionByName::JOB_NAME,
+            class: ApplyRetentionByName::class,
+            context: ['name' => $config->name],
+        );
     }
 }

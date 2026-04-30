@@ -24,6 +24,7 @@ readonly class BackupConfig
         public string $sshHost,
         public string $sshUsername,
         public string $localBackupFolderName,
+        public int $retentionCount = 30,
         array $databaseConfigs = [],
         array $rsyncConfigs = [],
     ) {
