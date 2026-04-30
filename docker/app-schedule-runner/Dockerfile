@@ -1,4 +1,4 @@
-ARG APP_IMAGE=buzzingpixel-site-backups
+ARG APP_IMAGE=ghcr.io/buzzingpixel/site-backups-app
 FROM $APP_IMAGE
 
 RUN apt-get update && apt-get install -y --no-install-recommends cron \

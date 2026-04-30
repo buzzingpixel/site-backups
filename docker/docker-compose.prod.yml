@@ -10,7 +10,7 @@ services:
     env_file:
       - ./app/.env
       - ./app/.env.local
-    image: buzzingpixel-site-backups-queue-consumer
+    image: ghcr.io/buzzingpixel/site-backups-queue-consumer
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
     volumes:
@@ -29,7 +29,7 @@ services:
     env_file:
       - ./app/.env
       - ./app/.env.local
-    image: buzzingpixel-site-backups-schedule-runner
+    image: ghcr.io/buzzingpixel/site-backups-schedule-runner
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
     volumes:
