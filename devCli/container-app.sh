@@ -3,6 +3,7 @@
 set -e;
 
 docker run -it --rm \
+    --name buzzingpixel-site-backups-app \
     --env-file docker/app/.env \
     --env-file docker/app/.env.local \
     -v $(pwd):/var/www \

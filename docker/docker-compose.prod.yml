@@ -32,3 +32,15 @@ services:
       - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
       - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
       - /Volumes/ivy-ext-01/site-backups:/storage
+
+  redis:
+    image: redis
+    volumes:
+      - redis-volume:/data
+    networks:
+      default:
+        aliases:
+          - buzzingpixel-site-backups-redis
+
+volumes:
+  redis-volume:
