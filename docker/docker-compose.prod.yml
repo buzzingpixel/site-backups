@@ -1,5 +1,7 @@
 services:
   app-queue-consumer:
+    depends_on:
+      - redis
     deploy:
       rollback_config:
         order: start-first
@@ -17,6 +19,8 @@ services:
       - /Volumes/ivy-ext-01/site-backups:/storage
 
   app-schedule-runner:
+    depends_on:
+      - redis
     deploy:
       rollback_config:
         order: start-first

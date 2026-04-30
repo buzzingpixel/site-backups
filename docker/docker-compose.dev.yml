@@ -1,6 +1,8 @@
 services:
   app-queue-consumer:
     restart: always
+    depends_on:
+      - redis
     env_file:
       - ./app/.env
       - ./app/.env.local
@@ -12,9 +14,12 @@ services:
       - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
       - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
       - /Volumes/Promenade/git/site-backups/storage:/storage
+      - ../:/var/www:delegated
 
   app-schedule-runner:
     restart: always
+    depends_on:
+      - redis
     env_file:
       - ./app/.env
       - ./app/.env.local
@@ -26,6 +31,7 @@ services:
       - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
       - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
       - /Volumes/Promenade/git/site-backups/storage:/storage
+      - ../:/var/www:delegated
 
   redis:
     container_name: buzzingpixel-site-backups-redis

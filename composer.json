@@ -12,6 +12,7 @@
         "buzzingpixel/php-scheduler": "^1.1",
         "buzzingpixel/php-template-engine": "^1.0",
         "jenwachter/php-rsync": "^2.0",
+        "lcobucci/clock": "^3.6",
         "psr/log": "^3",
         "rxante/php-app-bootstrap": "^1.2",
         "symfony/cache": "^7.4"
