@@ -12,7 +12,7 @@ env:
 jobs:
   build-app:
     name: Build app image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
 
   build-app-dependent-queue-consumer:
     name: Build app-queue-consumer image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     needs: build-app
     steps:
       - name: Checkout
@@ -53,7 +53,7 @@ jobs:
 
   build-app-dependent-schedule-runner:
     name: Build app-schedule-runner image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     needs: build-app
     steps:
       - name: Checkout

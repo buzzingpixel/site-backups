@@ -44,7 +44,7 @@ runs:
       with:
         context: .
         file: ${{ inputs.file }}
-        platforms: linux/amd64
+        platforms: linux/arm64
         push: true
         tags: ${{ inputs.tags }}
         build-args: ${{ inputs.build-args }}
