@@ -94,7 +94,10 @@ jobs:
           cp ${{ github.workspace }}/docker/docker-compose.prod.yml docker/docker-compose.prod.yml;
 
           # Log in to GitHub Container Registry so we can pull images
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin;
+          # Disable macOS Keychain credential store to allow non-interactive login
+          mkdir -p ~/.docker;
+          echo '{"credsStore":""}' > ~/.docker/config.json;
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin;
 
           # Pull images
           docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-app:${{ github.sha }};
