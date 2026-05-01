@@ -14,9 +14,15 @@ services:
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
     volumes:
-      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
-      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
-      - /Volumes/ivy-ext-01/site-backups:/storage
+      - type: bind
+        source: /Users/tj/.ssh/id_rsa
+        target: /root/.ssh/id_rsa
+      - type: bind
+        source: /Users/tj/.ssh/id_rsa.pub
+        target: /root/.ssh/id_rsa.pub
+      - type: bind
+        source: /Volumes/ivy-ext-01/site-backups
+        target: /storage
 
   app-schedule-runner:
     depends_on:
@@ -33,9 +39,15 @@ services:
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
     volumes:
-      - /Users/tj/.ssh/id_rsa:/root/.ssh/id_rsa
-      - /Users/tj/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
-      - /Volumes/ivy-ext-01/site-backups:/storage
+      - type: bind
+        source: /Users/tj/.ssh/id_rsa
+        target: /root/.ssh/id_rsa
+      - type: bind
+        source: /Users/tj/.ssh/id_rsa.pub
+        target: /root/.ssh/id_rsa.pub
+      - type: bind
+        source: /Volumes/ivy-ext-01/site-backups
+        target: /storage
 
   redis:
     image: redis
