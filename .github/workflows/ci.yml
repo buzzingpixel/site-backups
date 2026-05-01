@@ -94,11 +94,11 @@ jobs:
           cp ${{ github.workspace }}/docker/docker-compose.prod.yml docker/docker-compose.prod.yml;
 
           # Log in to GitHub Container Registry so we can pull images
-          # Use a temp DOCKER_CONFIG dir with an explicit empty credsStore to prevent
-          # Docker from falling back to docker-credential-osxkeychain on macOS
+          # Write auth directly to a temp config to bypass macOS credential helpers entirely
           export DOCKER_CONFIG=$(mktemp -d);
-          echo '{"credsStore":""}' > $DOCKER_CONFIG/config.json;
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin;
+          printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
+            "$(printf '%s:%s' '${{ github.actor }}' '${{ secrets.GITHUB_TOKEN }}' | base64)" \
+            > $DOCKER_CONFIG/config.json;
 
           # Pull images
           docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-app:${{ github.sha }};
