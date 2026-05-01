@@ -71,3 +71,39 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAMESPACE }}/site-backups-schedule-runner
             ${{ env.IMAGE_NAMESPACE }}/site-backups-schedule-runner:${{ github.sha }}
+
+  deploy:
+    name: Deploy to production
+    runs-on: Ivy
+    needs:
+      - build-app
+      - build-app-dependent-queue-consumer
+      - build-app-dependent-schedule-runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Copy deploy files to production directory
+        # Work from our deploy directory
+        working-directory: /Volumes/ivy-ext-01/site-backups-deploy
+        run: |
+          # Fail on any error
+          set -e;
+
+          # Copy environment files for Docker
+          cp ${{ github.workspace }}/docker/app/.env docker/app/.env;
+          cp ${{ github.workspace }}/docker/docker-compose.prod.yml docker/docker-compose.prod.yml;
+
+          # Log in to GitHub Container Registry so we can pull images
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin;
+
+          # Pull images
+          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-app:${{ github.sha }};
+          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-queue-consumer:${{ github.sha }};
+          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-schedule-runner:${{ github.sha }};
+          
+          docker stack deploy \
+              --compose-file docker/docker-compose.prod.yml \
+              --prune \
+              --with-registry-auth \
+              --resolve-image always \
+              site-backups;
