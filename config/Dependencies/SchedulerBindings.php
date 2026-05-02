@@ -7,7 +7,9 @@ namespace Config\Dependencies;
 use BuzzingPixel\Scheduler\Framework\RunScheduleSymfonyCommand;
 use BuzzingPixel\Scheduler\RedisDriver\RedisScheduleHandler;
 use BuzzingPixel\Scheduler\ScheduleHandler;
+use BuzzingPixel\Scheduler\SchedulerTimeZone;
 use Config\ScheduleFactory;
+use DateTimeZone;
 use RxAnte\AppBootstrap\Dependencies\Bindings;
 
 readonly class SchedulerBindings
@@ -31,6 +33,13 @@ readonly class SchedulerBindings
                     'name',
                     'schedule:run',
                 ),
+        );
+
+        $bindings->addBinding(
+            SchedulerTimeZone::class,
+            static fn () => new SchedulerTimeZone(
+                new DateTimeZone('US/Central'),
+            ),
         );
     }
 }
