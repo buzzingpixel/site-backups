@@ -38,6 +38,26 @@ readonly class BackupConfigBindings
                             remoteSqlPath: '/root/stmarkreformed.com/stmarkreformed.sql',
                             sqlFileName: 'stmarkreformed.sql',
                         ),
+                        new BackupMysqlDatabaseConfig(
+                            dbUser: 'smrc_api',
+                            dbPassword: $runtimeConfig->getString(
+                                from: RuntimeConfigOptions::SMRC_API_DB_PASSWORD,
+                            ),
+                            dbName: 'smrc_api',
+                            dbContainerName: 'smrc_db',
+                            remoteSqlPath: '/root/stmarkreformed.com/smrc_api.sql',
+                            sqlFileName: 'smrc_api.sql',
+                        ),
+                        new BackupMysqlDatabaseConfig(
+                            dbUser: 'smrc_auth',
+                            dbPassword: $runtimeConfig->getString(
+                                from: RuntimeConfigOptions::SMRC_AUTH_DB_PASSWORD,
+                            ),
+                            dbName: 'smrc_auth',
+                            dbContainerName: 'smrc_db',
+                            remoteSqlPath: '/root/stmarkreformed.com/smrc_auth.sql',
+                            sqlFileName: 'smrc_auth.sql',
+                        ),
                     ],
                     rsyncConfigs: [
                         new BackupRsyncConfig(
