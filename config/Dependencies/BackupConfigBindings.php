@@ -24,6 +24,7 @@ readonly class BackupConfigBindings
             static fn () => new BackupConfigCollection(configs: [
                 new BackupConfig(
                     name: 'smrc',
+                    retentionCount: 15,
                     sshHost: '5.161.111.41',
                     sshUsername: 'root',
                     localBackupFolderName: 'stmarkreformed.com',
@@ -108,6 +109,7 @@ readonly class BackupConfigBindings
                 ),
                 new BackupConfig(
                     name: 'moviebyte',
+                    retentionCount: 15,
                     sshHost: '5.161.94.209',
                     sshUsername: 'root',
                     localBackupFolderName: 'moviebyte.com',
@@ -132,6 +134,7 @@ readonly class BackupConfigBindings
                 ),
                 new BackupConfig(
                     name: 'nightowl',
+                    retentionCount: 15,
                     sshHost: '5.161.94.209',
                     sshUsername: 'root',
                     localBackupFolderName: 'nightowl.fm',
