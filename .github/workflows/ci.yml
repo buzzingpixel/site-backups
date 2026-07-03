@@ -83,31 +83,76 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Copy deploy files to production directory
-        # Work from our deploy directory
-        working-directory: /Volumes/ivy-ext-01/site-backups-deploy
+        # Run from the internal workspace, NOT the external deploy volume: the
+        # runner cd's into working-directory before this script executes, so if
+        # that path is on /Volumes/... a stall there happens before any of our
+        # guards can catch it. We reach the external volume explicitly below.
+        working-directory: ${{ github.workspace }}
         run: |
-          # Fail on any error
-          set -e;
+          # Fail on any error, unset var, or failed pipe stage
+          set -euo pipefail
 
-          # Copy environment files for Docker
-          cp ${{ github.workspace }}/docker/app/.env docker/app/.env;
-          cp ${{ github.workspace }}/docker/docker-compose.prod.yml docker/docker-compose.prod.yml;
+          # Absolute path to the deploy directory on the external volume
+          DEPLOY_DIR=/Volumes/ivy-ext-01/site-backups-deploy
 
-          # Log in to GitHub Container Registry so we can pull images
-          # Write auth directly to a temp config to bypass macOS credential helpers entirely
-          export DOCKER_CONFIG=$(mktemp -d);
+          # Portable timeout wrapper. macOS ships no `timeout` (that's GNU
+          # coreutils), so run each command in the background and kill it if it
+          # overruns. A stall now fails fast with a ::error:: line naming the
+          # exact command, instead of a silent multi-minute spinner.
+          #   run_step <seconds> <label> <command...>
+          run_step() {
+            local secs="$1" label="$2"; shift 2
+            local start=$SECONDS
+            echo "==> ${label} (timeout ${secs}s)"
+            "$@" &
+            local cmd_pid=$!
+            (
+              sleep "$secs"
+              if kill -0 "$cmd_pid" 2>/dev/null; then
+                echo "::error::TIMEOUT after ${secs}s during: ${label}"
+                kill -TERM "$cmd_pid" 2>/dev/null || true
+                sleep 3
+                kill -KILL "$cmd_pid" 2>/dev/null || true
+              fi
+            ) &
+            local watcher_pid=$!
+            local status=0
+            wait "$cmd_pid" || status=$?
+            kill "$watcher_pid" 2>/dev/null || true
+            wait "$watcher_pid" 2>/dev/null || true
+            if [ "$status" -ne 0 ]; then
+              echo "::error::FAILED (exit ${status}) during: ${label}"
+              return "$status"
+            fi
+            echo "==> OK: ${label} ($((SECONDS - start))s)"
+          }
+
+          # Copy environment + compose files into the deploy dir.
+          # This is the first touch of the external volume — if the macOS
+          # removable-volume permission is missing, it stalls here and the
+          # 30s guard reports exactly that.
+          run_step 30 "copy app .env"     cp "${{ github.workspace }}/docker/app/.env" "${DEPLOY_DIR}/docker/app/.env"
+          run_step 30 "copy compose file" cp "${{ github.workspace }}/docker/docker-compose.prod.yml" "${DEPLOY_DIR}/docker/docker-compose.prod.yml"
+
+          # Log in to GitHub Container Registry so we can pull images.
+          # Write auth directly to a temp config to bypass macOS credential helpers entirely.
+          export DOCKER_CONFIG="$(mktemp -d)"
           printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
             "$(printf '%s:%s' '${{ github.actor }}' '${{ secrets.GITHUB_TOKEN }}' | base64)" \
-            > $DOCKER_CONFIG/config.json;
+            > "${DOCKER_CONFIG}/config.json"
 
           # Pull images
-          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-app:${{ github.sha }};
-          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-queue-consumer:${{ github.sha }};
-          docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-schedule-runner:${{ github.sha }};
-          
-          docker stack deploy \
-              --compose-file docker/docker-compose.prod.yml \
+          run_step 180 "pull app image"             docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-app:${{ github.sha }}
+          run_step 180 "pull queue-consumer image"  docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-queue-consumer:${{ github.sha }}
+          run_step 180 "pull schedule-runner image" docker pull ${{ env.IMAGE_NAMESPACE }}/site-backups-schedule-runner:${{ github.sha }}
+
+          # Deploy the stack
+          run_step 120 "docker stack deploy" \
+            docker stack deploy \
+              --compose-file "${DEPLOY_DIR}/docker/docker-compose.prod.yml" \
               --prune \
               --with-registry-auth \
               --resolve-image always \
-              site-backups;
+              site-backups
+
+          echo "==> Deploy step complete"
