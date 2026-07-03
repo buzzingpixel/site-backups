@@ -62,6 +62,10 @@ readonly class BackupConfigBindings
                     ],
                     rsyncConfigs: [
                         new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: '/root/certbot',
+                            destinationDirectoryName: 'certbot',
+                        ),
+                        new BackupRsyncConfig(
                             rootRelativeServerSrcDir: 'var/lib/docker/volumes/smrc_files-above-webroot-volume/_data/',
                             destinationDirectoryName: 'filesAboveWebroot',
                         ),
@@ -97,6 +101,10 @@ readonly class BackupConfigBindings
                         ),
                     ],
                     rsyncConfigs: [
+                        new BackupRsyncConfig(
+                            rootRelativeServerSrcDir: '/root/certbot',
+                            destinationDirectoryName: 'certbot',
+                        ),
                         new BackupRsyncConfig(
                             rootRelativeServerSrcDir: 'var/lib/docker/volumes/buzzingpixel_files-volume/_data/',
                             destinationDirectoryName: 'files',
