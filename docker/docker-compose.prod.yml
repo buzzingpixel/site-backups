@@ -11,6 +11,8 @@ services:
       - ./app/.env
       - ./app/.env.local
     image: ghcr.io/buzzingpixel/site-backups-queue-consumer
+    dns:
+      - 100.100.100.100
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
     volumes:
@@ -36,6 +38,8 @@ services:
       - ./app/.env
       - ./app/.env.local
     image: ghcr.io/buzzingpixel/site-backups-schedule-runner
+    dns:
+      - 100.100.100.100
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
     volumes:
