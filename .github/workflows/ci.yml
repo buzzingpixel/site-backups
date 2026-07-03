@@ -92,8 +92,15 @@ jobs:
           # Fail on any error, unset var, or failed pipe stage
           set -euo pipefail
 
-          # Absolute path to the deploy directory on the external volume
-          DEPLOY_DIR=/Volumes/ivy-ext-01/site-backups-deploy
+          # Deploy files (env + compose) live on the INTERNAL disk: fast, and the
+          # runner needs no external-volume permission to write them. Only the
+          # backup STORAGE stays on the external volume, and that is bind-mounted
+          # by Docker (see docker-compose.prod.yml), never touched by this script.
+          DEPLOY_DIR=/Users/tj/site-backups-deploy
+
+          # External volume Docker bind-mounts as /storage. We only verify it is
+          # mounted before deploying; this script never writes to it.
+          STORAGE_VOLUME=/Volumes/ivy-ext-01
 
           # Portable timeout wrapper. macOS ships no `timeout` (that's GNU
           # coreutils), so run each command in the background and kill it if it
@@ -127,10 +134,28 @@ jobs:
             echo "==> OK: ${label} ($((SECONDS - start))s)"
           }
 
-          # Copy environment + compose files into the deploy dir.
-          # This is the first touch of the external volume — if the macOS
-          # removable-volume permission is missing, it stalls here and the
-          # 30s guard reports exactly that.
+          # Safety: the stack bind-mounts ${STORAGE_VOLUME}/site-backups as /storage.
+          # If that volume isn't mounted, Docker would bind-mount an empty path and
+          # backups would silently write to nowhere — so refuse to deploy.
+          if ! mount | grep -qF " on ${STORAGE_VOLUME} ("; then
+            echo "::error::Storage volume not mounted at ${STORAGE_VOLUME}. Check the drive on Ivy; refusing to deploy."
+            exit 1
+          fi
+
+          # cp does not create parent directories — ensure the copy targets exist.
+          run_step 30 "ensure deploy dirs" mkdir -p "${DEPLOY_DIR}/docker/app"
+
+          # Production secrets live on the box (gitignored, never copied from the
+          # repo). If they're missing the stack would come up misconfigured, so
+          # stop with a clear message instead of deploying a broken stack.
+          if [ ! -f "${DEPLOY_DIR}/docker/app/.env.local" ]; then
+            echo "::error::Missing ${DEPLOY_DIR}/docker/app/.env.local (production secrets, not in git). Recreate it on Ivy, then re-run."
+            exit 1
+          fi
+
+          # Copy environment + compose files from the checkout into the deploy dir
+          # (internal disk). .env.local is NOT copied — it's the persistent,
+          # gitignored secrets file that already lives in the deploy dir.
           run_step 30 "copy app .env"     cp "${{ github.workspace }}/docker/app/.env" "${DEPLOY_DIR}/docker/app/.env"
           run_step 30 "copy compose file" cp "${{ github.workspace }}/docker/docker-compose.prod.yml" "${DEPLOY_DIR}/docker/docker-compose.prod.yml"
 
