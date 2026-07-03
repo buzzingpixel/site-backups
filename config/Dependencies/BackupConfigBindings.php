@@ -25,7 +25,7 @@ readonly class BackupConfigBindings
                 new BackupConfig(
                     name: 'smrc',
                     retentionCount: 15,
-                    sshHost: '5.161.111.41',
+                    sshHost: 'smrc-hetzner-docker',
                     sshUsername: 'root',
                     localBackupFolderName: 'stmarkreformed.com',
                     databaseConfigs: [
@@ -85,7 +85,7 @@ readonly class BackupConfigBindings
                 ),
                 new BackupConfig(
                     name: 'buzzingpixel',
-                    sshHost: '5.161.94.209',
+                    sshHost: 'buzzingpixel-hetzner-docker',
                     sshUsername: 'root',
                     localBackupFolderName: 'buzzingpixel.com',
                     databaseConfigs: [
@@ -118,7 +118,7 @@ readonly class BackupConfigBindings
                 new BackupConfig(
                     name: 'moviebyte',
                     retentionCount: 15,
-                    sshHost: '5.161.94.209',
+                    sshHost: 'buzzingpixel-hetzner-docker',
                     sshUsername: 'root',
                     localBackupFolderName: 'moviebyte.com',
                     databaseConfigs: [
@@ -143,7 +143,7 @@ readonly class BackupConfigBindings
                 new BackupConfig(
                     name: 'nightowl',
                     retentionCount: 15,
-                    sshHost: '5.161.94.209',
+                    sshHost: 'buzzingpixel-hetzner-docker',
                     sshUsername: 'root',
                     localBackupFolderName: 'nightowl.fm',
                     databaseConfigs: [
