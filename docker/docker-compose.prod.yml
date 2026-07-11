@@ -59,6 +59,17 @@ services:
     image: redis
     volumes:
       - redis-volume:/data
+      # Redis does not use this mount. It exists so the redis task shares the
+      # same dependency on the external backup drive as the app services, so it
+      # won't start (and register swarm DNS) during the early-boot window before
+      # /Volumes/ivy-ext-01 is mounted. On the Jul 2026 reboot, redis started
+      # ahead of the still-flapping app tasks and ended up Up but unresolvable by
+      # service name; gating it on the same mount keeps all three converging
+      # together after the drive is available.
+      - type: bind
+        source: /Volumes/ivy-ext-01/site-backups
+        target: /storage
+        read_only: true
     networks:
       default:
         aliases:
