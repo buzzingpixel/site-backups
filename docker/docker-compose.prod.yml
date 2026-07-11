@@ -11,10 +11,9 @@ services:
       - ./app/.env
       - ./app/.env.local
     image: ghcr.io/buzzingpixel/site-backups-queue-consumer
-    dns:
-      - 100.100.100.100
-    dns_search:
-      - tail48514c.ts.net
+    extra_hosts:
+      - "buzzingpixel-hetzner-docker:100.89.248.3"
+      - "smrc-hetzner-docker:100.82.195.58"
     environment:
       HOSTNAME: buzzingpixel-site-backups-queue-consumer
     volumes:
@@ -40,10 +39,9 @@ services:
       - ./app/.env
       - ./app/.env.local
     image: ghcr.io/buzzingpixel/site-backups-schedule-runner
-    dns:
-      - 100.100.100.100
-    dns_search:
-      - tail48514c.ts.net
+    extra_hosts:
+      - "buzzingpixel-hetzner-docker:100.89.248.3"
+      - "smrc-hetzner-docker:100.82.195.58"
     environment:
       HOSTNAME: buzzingpixel-site-backups-schedule-runner
     volumes:
